@@ -1,0 +1,7 @@
+# ignore vscode related stuff
+.vscode
+.micropico
+
+/helpers/connectWIFI.py
+
+/works
