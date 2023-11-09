@@ -77,15 +77,6 @@ class Effects:
         #print("external led index's = ", ext_index)
         return ext_index
 
-    # def fillIntLights(self, color):
-    #     x = self.intLights()
-    #     print(x,x[5],x[0])
-    #     for i in range(len(x)): #range(len(self.intLights()))
-    #         print(i)
-    #         ledIndex = x[i]
-    #         self.led.pixels_set(ledIndex, self.pal.pickColor(color))
-    #     self.led.pixels_show(self.brt)
-
     def fillIntLights(self, color):
         for i in range(len(self.intLights())): #range(len(self.intLights()))
             ledIndex = self.intLights()[i]

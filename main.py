@@ -16,8 +16,8 @@ PBSW1_NAME = "Mode"
 
 eff = effect.Effects(LED_TYPE, NUM_LEDS, PIN_NUM, BRIGHTNESS, INTERAL_LEDS, EXTERNAL_LEDS)
 eff.details()
-pb1 = buttons.Pbswitch(PBSW1_PIN)
-pb2 = buttons.Pbswitch(PBSW2_PIN)
+modesw = buttons.Pbswitch(PBSW1_PIN)
+brtsw = buttons.Pbswitch(PBSW2_PIN)
 
 def main():
     global BRIGHTNESS
@@ -26,25 +26,36 @@ def main():
         cmode = 0
         eff.modeSelect(cmode)
         while True:
-            time.sleep(.1)
-            if pb1.pressed() == True:
-                pb1.reset()
-                cmode += 1
-                if cmode >= 5:
+            # Check if button was pressed and released, 
+            # then do something based on length of button press.
+            # If btn press was less then 1000ms then change mode. 
+            # If more then 1000ms then set mode to 0 or off state
+
+            modep,modesp,modelp = modesw.status()
+            brtp,brtsp,brtlp = brtsw.status()
+
+            if modep == True:
+                if modelp == True:
+                    modesw.reset()
                     cmode = 0
-                eff.modeSelect(cmode)
-            if pb2.pressed() == True:
-                pb2.reset()
-                print("SW2 pressed")
+                    eff.modeSelect(cmode)
+                elif modesp == True:
+                    modesw.reset()
+                    cmode += 1
+                    if cmode >= 5:
+                        cmode = 0
+                    eff.modeSelect(cmode)
+            if brtp == True:
+                brtsw.reset()
                 oldBRT = BRIGHTNESS
                 BRIGHTNESS += .05
                 if BRIGHTNESS >= 1.02:
                     BRIGHTNESS = 0.4
                 print("Orig Brt = ", oldBRT, "New Brt = ", BRIGHTNESS)
                 eff.updateBrt(BRIGHTNESS)
+            time.sleep(.2)
 
     except KeyboardInterrupt:
-        print("Good Bye")
         eff.clear()
         eff.clearDisp()
 
